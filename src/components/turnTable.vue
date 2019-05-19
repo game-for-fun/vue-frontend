@@ -16,7 +16,7 @@
           <div class="cell">
             <input type="text" :value="item.label" @change="changeItemLabel($event, index)">
           </div>
-          <div class="cell" :style="cellStyleHandler(item.color)">
+          <div class="cell" :style="cellStyleHandler(item.color,index)">
             <input type="text" :value="item.color" @change="changeItemColor($event, index)">
           </div>
         </div>
@@ -28,10 +28,10 @@
     <div class="container" :style="rotateHandler">
       <div
         class="item"
-        v-for="item in list"
+        v-for="(item,index) in list"
         :key="item.label"
-        :style="itemStyleHandler(item)"
-      >{{item.label}}</div>
+        :style="itemStyleHandler(item,index)"
+      ><img class="skew-back" src="../assets/roleSmall/beijita-small.jpg" alt=""><span class="skew-back">{{item.label}}</span></div>
     </div>
     <div class="control">
       <div class="button" @click="openSetting">轉盤設定</div>
@@ -41,7 +41,8 @@
 
 <script>
 const CIRCLE_DEGREE = 360
-const TARGET_DEGREE = 180
+const TARGET_DEGREE_START = 18
+const TARGET_DEGREE_END = 90
 const DEUCE = {
   label: '平手',
   color: 'F8CDDE'
@@ -56,21 +57,35 @@ export default {
     return {
       isFinish: false,
       isOpen: false,
-      rotateCount: 0,
+      rotateCount: -72,
       items: [
         {
-          label: "阿輝",
-          color: "A7DBE2"
+          label: "孙悟饭",
+          color: "E0BECA"
         },
         {
-          label: "阿珊",
-          color: "E0BECA"
+          label: "沙鲁",
+          color: "A7DBE2"
+        },
+        
+        {
+          label:'拉蒂兹',
+          color:'ddd'
+        },
+         {
+          label:'贝吉塔',
+          color:'af3d3d'
+        },
+         {
+          label:'天津饭',
+          color:'3d60af'
         }
       ],
       DEUCE,
       COLORS,
       CIRCLE_DEGREE,
-      TARGET_DEGREE
+      TARGET_DEGREE_START,
+      TARGET_DEGREE_END
     };
   },
   computed: {
@@ -81,11 +96,12 @@ export default {
     },
     list() {
       const deg = this.CIRCLE_DEGREE / this.items.length;
+      const labels=this.items.slice().map(i=>i.label).reverse();
       return this.items.slice().map(({ label, color }, index) => {
         return {
           startDeg: deg * index,
-          endDeg: deg * (index + 1),
-          label,
+          endDeg: deg * (index+1),
+          label:label,
           color
         };
       });
@@ -95,8 +111,8 @@ export default {
       const result = [];
       this.list.forEach(item => {
         if (
-          item.startDeg <= this.TARGET_DEGREE ||
-          item.endDeg >= this.TARGET_DEGREE
+          item.startDeg>=this.TARGET_DEGREE_START&&item.startDeg<=this.TARGET_DEGREE_END
+         
         ) {
           result.push(item);
         }
@@ -111,9 +127,10 @@ export default {
     }
   },
   methods: {
-    itemStyleHandler(item) {
+    itemStyleHandler(item,index) {
       return {
-        backgroundColor: `#${item.color}`
+        backgroundColor: `#${item.color}`,
+        transform: `rotate(${360/this.items.length+index*(360/this.items.length)}deg) skewY(-${360/(this.items.length*4)}deg)`
       };
     },
     winnerStyleHandler(color) {
@@ -124,6 +141,7 @@ export default {
     cellStyleHandler(color) {
       return {
         backgroundColor: `#${color}`
+        
       };
     },
     rotateTurnTable() {
@@ -166,13 +184,18 @@ export default {
   width: $w;
   height: $h;
 }
-
+.skew-back{
+  transform: skewY(18deg);
+}
 $color_red: #ef8888;
 $color_black: #000;
 $color_white: #fff;
 $color_shadow: rgba(0, 0, 0, 0.5);
 
 #turn-table {
+  //background: url('../')
+  background: url(../assets/bg_circle.jpg) top center;
+  background-size: cover;
   @include size(100vw, 100vh);
   position: relative;
   display: flex;
@@ -338,6 +361,19 @@ $color_shadow: rgba(0, 0, 0, 0.5);
       font-size: 36px;
       font-weight: 700;
       letter-spacing: 0.4px;
+     overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 50%;
+    transform-origin: 0% 100%;
+    span{
+      font-size: 20px;
+      padding-top: 45px;
+    padding-right: 45px;
+
+    }
     }
   }
   > .control {
