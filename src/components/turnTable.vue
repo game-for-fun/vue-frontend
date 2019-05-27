@@ -180,6 +180,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+$color:#E94E3D;
+$box-shadow-width:10px;
+$negative-box-shadow-width:-10px;
 @mixin size($w, $h: $w) {
   width: $w;
   height: $h;
@@ -344,6 +347,7 @@ $color_shadow: rgba(0, 0, 0, 0.5);
     }
   }
   > .container {
+   // animation: border .4s ease 1 forwards;
     @include size(300px);
     background-color: $color_white;
     border-radius: 50%;
@@ -352,6 +356,7 @@ $color_shadow: rgba(0, 0, 0, 0.5);
     transition: 2s;
     box-sizing: border-box;
     overflow: hidden;
+      box-shadow: 2*$box-shadow-width 2*$negative-box-shadow-width 0 2px $color, 2*$negative-box-shadow-width 2*$negative-box-shadow-width 0 2px $color, 2*$negative-box-shadow-width 2*$box-shadow-width 0 2px $color, 2*$box-shadow-width 2*$box-shadow-width 0 2px $color, 0 0 0 2px #E94E3D;
     > .item {
       @include size(100%, 50%);
       display: flex;
@@ -399,5 +404,24 @@ $color_shadow: rgba(0, 0, 0, 0.5);
       }
     }
   }
+  @keyframes border{
+  0% {
+    box-shadow: $box-shadow-width $negative-box-shadow-width 0 2px $color, $negative-box-shadow-width $negative-box-shadow-width 0 2px $color, $negative-box-shadow-width $box-shadow-width 0 2px $color, $box-shadow-width $box-shadow-width 0 2px $color, 0 0 0 2px #E94E3D;
+  }
+  25% {
+    box-shadow: 0 -125px 0 2px $color, -60px -60px 0 2px $color, -60px 60px 0 2px $color, 60px 60px 0 2px $color, 0 0 0 2px #fff;
+  }
+  50% {
+    box-shadow: 0 -125px 0 2px $color, -125px 0px 0 2px $color, -60px 60px 0 2px $color, 60px 60px 0 2px $color, 0 0 0 2px #fff;
+  }
+  75% {
+    box-shadow: 0 -125px 0 2px $color, -125px 0px 0 2px $color, 0px 125px 0 2px $color, 60px 60px 0 2px $color, 0 0 0 2px #fff;
+  }
+  100% {
+    box-shadow: 0 -125px 0 2px $color, -125px 0px 0 2px $color, 0px 125px 0 2px $color, 120px 40px 0 2px $color, 0 0 0 2px #fff;
+  }
+   
 }
+}
+
 </style>
