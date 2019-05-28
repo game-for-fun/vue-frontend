@@ -1,10 +1,8 @@
 <template>
   <div id="turn-table">
-    <div
-      :class="winnerClassHandler"
-      :style="winnerStyleHandler(winner.color)"
-      :data-winner="winner.label"
-    ></div>
+
+    <div :class="winnerClassHandler" :style="winnerStyleHandler(winner.color)" :data-winner="winner.label">
+    </div>
     <div v-if="isOpen" class="setting">
       <div class="bgc" @click="closeSetting"></div>
       <div class="list">
@@ -26,35 +24,42 @@
       <span>GO</span>
     </div>
     <div class="container" :style="rotateHandler">
-      <div
-        class="item"
-        v-for="(item,index) in list"
-        :key="item.label"
-        :style="itemStyleHandler(item,index)"
-      ><img class="skew-back" src="../assets/roleSmall/beijita-small.jpg" alt=""><span class="skew-back">{{item.label}}</span></div>
+      <div class="item" v-for="(item,index) in list" :key="item.label" :style="itemStyleHandler(item,index)"><img class="skew-back" src="../assets/roleSmall/beijita-small.jpg" alt="">
+        <span class="skew-back">{{item.label}}</span>
+      </div>
     </div>
     <div class="control">
       <div class="button" @click="openSetting">轉盤設定</div>
     </div>
+    <!--抽卡弹窗st-->
+    <Dialog :visible.sync="show"></Dialog>
+    <!--ed-->
+
   </div>
+
 </template>
 
 <script>
-const CIRCLE_DEGREE = 360
-const TARGET_DEGREE_START = 18
-const TARGET_DEGREE_END = 90
+import Dialog from "@/components/turnTable/dialog";
+const CIRCLE_DEGREE = 360;
+const TARGET_DEGREE_START = 18;
+const TARGET_DEGREE_END = 90;
 const DEUCE = {
-  label: '平手',
-  color: 'F8CDDE'
-}
-const COLORS = ['305F72', 'F1D1B5', 'F0B7A4', 'F18C8E', 'C8E6F5', '5CA0D3']
+  label: "平手",
+  color: "F8CDDE"
+};
+const COLORS = ["305F72", "F1D1B5", "F0B7A4", "F18C8E", "C8E6F5", "5CA0D3"];
 export default {
   name: "turnTable",
   props: {
     msg: String
   },
+  components: {
+    Dialog
+  },
   data() {
     return {
+      show: false,
       isFinish: false,
       isOpen: false,
       rotateCount: -72,
@@ -67,18 +72,18 @@ export default {
           label: "沙鲁",
           color: "A7DBE2"
         },
-        
+
         {
-          label:'拉蒂兹',
-          color:'ddd'
+          label: "拉蒂兹",
+          color: "ddd"
         },
-         {
-          label:'贝吉塔',
-          color:'af3d3d'
+        {
+          label: "贝吉塔",
+          color: "af3d3d"
         },
-         {
-          label:'天津饭',
-          color:'3d60af'
+        {
+          label: "天津饭",
+          color: "3d60af"
         }
       ],
       DEUCE,
@@ -96,12 +101,15 @@ export default {
     },
     list() {
       const deg = this.CIRCLE_DEGREE / this.items.length;
-      const labels=this.items.slice().map(i=>i.label).reverse();
+      const labels = this.items
+        .slice()
+        .map(i => i.label)
+        .reverse();
       return this.items.slice().map(({ label, color }, index) => {
         return {
           startDeg: deg * index,
-          endDeg: deg * (index+1),
-          label:label,
+          endDeg: deg * (index + 1),
+          label: label,
           color
         };
       });
@@ -111,8 +119,8 @@ export default {
       const result = [];
       this.list.forEach(item => {
         if (
-          item.startDeg>=this.TARGET_DEGREE_START&&item.startDeg<=this.TARGET_DEGREE_END
-         
+          item.startDeg >= this.TARGET_DEGREE_START &&
+          item.startDeg <= this.TARGET_DEGREE_END
         ) {
           result.push(item);
         }
@@ -127,10 +135,12 @@ export default {
     }
   },
   methods: {
-    itemStyleHandler(item,index) {
+    itemStyleHandler(item, index) {
       return {
         backgroundColor: `#${item.color}`,
-        transform: `rotate(${360/this.items.length+index*(360/this.items.length)}deg) skewY(-${360/(this.items.length*4)}deg)`
+        transform: `rotate(${360 / this.items.length +
+          index * (360 / this.items.length)}deg) skewY(-${360 /
+          (this.items.length * 4)}deg)`
       };
     },
     winnerStyleHandler(color) {
@@ -141,7 +151,6 @@ export default {
     cellStyleHandler(color) {
       return {
         backgroundColor: `#${color}`
-        
       };
     },
     rotateTurnTable() {
@@ -179,15 +188,15 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-$color:#E94E3D;
-$box-shadow-width:10px;
-$negative-box-shadow-width:-10px;
+<style  lang="scss">
+$color: #e94e3d;
+$box-shadow-width: 10px;
+$negative-box-shadow-width: -10px;
 @mixin size($w, $h: $w) {
   width: $w;
   height: $h;
 }
-.skew-back{
+.skew-back {
   transform: skewY(18deg);
 }
 $color_red: #ef8888;
@@ -347,7 +356,7 @@ $color_shadow: rgba(0, 0, 0, 0.5);
     }
   }
   > .container {
-   // animation: border .4s ease 1 forwards;
+    // animation: border .4s ease 1 forwards;
     @include size(300px);
     background-color: $color_white;
     border-radius: 50%;
@@ -356,7 +365,12 @@ $color_shadow: rgba(0, 0, 0, 0.5);
     transition: 2s;
     box-sizing: border-box;
     overflow: hidden;
-      box-shadow: 2*$box-shadow-width 2*$negative-box-shadow-width 0 2px $color, 2*$negative-box-shadow-width 2*$negative-box-shadow-width 0 2px $color, 2*$negative-box-shadow-width 2*$box-shadow-width 0 2px $color, 2*$box-shadow-width 2*$box-shadow-width 0 2px $color, 0 0 0 2px #E94E3D;
+    box-shadow: 2 * $box-shadow-width 2 * $negative-box-shadow-width 0 2px
+        $color,
+      2 * $negative-box-shadow-width 2 * $negative-box-shadow-width 0 2px $color,
+      2 * $negative-box-shadow-width 2 * $box-shadow-width 0 2px $color,
+      2 * $box-shadow-width 2 * $box-shadow-width 0 2px $color,
+      0 0 0 2px #e94e3d;
     > .item {
       @include size(100%, 50%);
       display: flex;
@@ -366,19 +380,18 @@ $color_shadow: rgba(0, 0, 0, 0.5);
       font-size: 36px;
       font-weight: 700;
       letter-spacing: 0.4px;
-     overflow: hidden;
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50%;
-    height: 50%;
-    transform-origin: 0% 100%;
-    span{
-      font-size: 20px;
-      padding-top: 45px;
-    padding-right: 45px;
-
-    }
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 50%;
+      transform-origin: 0% 100%;
+      span {
+        font-size: 20px;
+        padding-top: 45px;
+        padding-right: 45px;
+      }
     }
   }
   > .control {
@@ -404,24 +417,29 @@ $color_shadow: rgba(0, 0, 0, 0.5);
       }
     }
   }
-  @keyframes border{
-  0% {
-    box-shadow: $box-shadow-width $negative-box-shadow-width 0 2px $color, $negative-box-shadow-width $negative-box-shadow-width 0 2px $color, $negative-box-shadow-width $box-shadow-width 0 2px $color, $box-shadow-width $box-shadow-width 0 2px $color, 0 0 0 2px #E94E3D;
+  @keyframes border {
+    0% {
+      box-shadow: $box-shadow-width $negative-box-shadow-width 0 2px $color,
+        $negative-box-shadow-width $negative-box-shadow-width 0 2px $color,
+        $negative-box-shadow-width $box-shadow-width 0 2px $color,
+        $box-shadow-width $box-shadow-width 0 2px $color, 0 0 0 2px #e94e3d;
+    }
+    25% {
+      box-shadow: 0 -125px 0 2px $color, -60px -60px 0 2px $color,
+        -60px 60px 0 2px $color, 60px 60px 0 2px $color, 0 0 0 2px #fff;
+    }
+    50% {
+      box-shadow: 0 -125px 0 2px $color, -125px 0px 0 2px $color,
+        -60px 60px 0 2px $color, 60px 60px 0 2px $color, 0 0 0 2px #fff;
+    }
+    75% {
+      box-shadow: 0 -125px 0 2px $color, -125px 0px 0 2px $color,
+        0px 125px 0 2px $color, 60px 60px 0 2px $color, 0 0 0 2px #fff;
+    }
+    100% {
+      box-shadow: 0 -125px 0 2px $color, -125px 0px 0 2px $color,
+        0px 125px 0 2px $color, 120px 40px 0 2px $color, 0 0 0 2px #fff;
+    }
   }
-  25% {
-    box-shadow: 0 -125px 0 2px $color, -60px -60px 0 2px $color, -60px 60px 0 2px $color, 60px 60px 0 2px $color, 0 0 0 2px #fff;
-  }
-  50% {
-    box-shadow: 0 -125px 0 2px $color, -125px 0px 0 2px $color, -60px 60px 0 2px $color, 60px 60px 0 2px $color, 0 0 0 2px #fff;
-  }
-  75% {
-    box-shadow: 0 -125px 0 2px $color, -125px 0px 0 2px $color, 0px 125px 0 2px $color, 60px 60px 0 2px $color, 0 0 0 2px #fff;
-  }
-  100% {
-    box-shadow: 0 -125px 0 2px $color, -125px 0px 0 2px $color, 0px 125px 0 2px $color, 120px 40px 0 2px $color, 0 0 0 2px #fff;
-  }
-   
 }
-}
-
 </style>
