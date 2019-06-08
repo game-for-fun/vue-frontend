@@ -358,7 +358,7 @@ $color_shadow: rgba(0, 0, 0, 0.5);
   }
   > .container {
     z-index: 9999;
-    @include size(300px);
+    @include size(270px);
     background-color: $color_white;
     border-radius: 50%;
     border: 10px solid $color_white;
