@@ -24,14 +24,14 @@
       <span>GO</span>
     </div>
     <div class="container" :style="rotateHandler">
-   
-        <div class="item" v-for="(item,index) in list" :key="item.label" :style="itemStyleHandler(item,index)"><img class="skew-back" src="../assets/roleSmall/beijita-small.jpg" alt="">
-          <span class="skew-back">{{item.label}}</span>
-        </div>
-     
+
+      <div class="item" v-for="(item,index) in list" :key="item.label" :style="itemStyleHandler(item,index)"><img class="skew-back" :src="require(`../assets/roleSmall/${item.urlPart}-small.jpg`)" alt="">
+        <span class="skew-back">{{item.label}}</span>
+      </div>
+
     </div>
     <div class="control">
-      <div class="button" @click="openSetting">轉盤設定</div>
+      <!-- <div class="button" @click="openSetting">轉盤設定</div> -->
     </div>
     <!--抽卡弹窗st-->
     <Dialog :visible.sync="show"></Dialog>
@@ -68,24 +68,29 @@ export default {
       items: [
         {
           label: "孙悟饭",
-          color: "E0BECA"
+          color: "E0BECA",
+          urlPart: "sunwufan"
         },
         {
           label: "沙鲁",
-          color: "A7DBE2"
+          color: "A7DBE2",
+          urlPart: "shalu"
         },
 
         {
           label: "拉蒂兹",
-          color: "ddd"
+          color: "ddd",
+          urlPart: "ladizi"
         },
         {
           label: "贝吉塔",
-          color: "af3d3d"
+          color: "af3d3d",
+          urlPart: "beijita"
         },
         {
           label: "天津饭",
-          color: "3d60af"
+          color: "3d60af",
+          urlPart: "tianjinfan"
         }
       ],
       DEUCE,
@@ -107,12 +112,13 @@ export default {
         .slice()
         .map(i => i.label)
         .reverse();
-      return this.items.slice().map(({ label, color }, index) => {
+      return this.items.slice().map(({ label, color, urlPart }, index) => {
         return {
           startDeg: deg * index,
           endDeg: deg * (index + 1),
           label: label,
-          color
+          color,
+          urlPart
         };
       });
     },
@@ -344,7 +350,7 @@ $color_shadow: rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     letter-spacing: 1px;
     cursor: pointer;
-   // z-index: 10;
+    // z-index: 10;
     &::after {
       content: "";
       @include size(0px);
@@ -388,9 +394,14 @@ $color_shadow: rgba(0, 0, 0, 0.5);
       height: 50%;
       transform-origin: 0% 100%;
       span {
-        font-size: 20px;
+        font-size: 16px;
         padding-top: 45px;
         padding-right: 45px;
+        padding-left: 10px;
+      }
+      img {
+        margin-left: 9px;
+        border-radius: 8px;
       }
     }
   }
