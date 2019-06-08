@@ -325,6 +325,7 @@ $color_shadow: rgba(0, 0, 0, 0.5);
   }
   > .go {
     @include size(60px);
+    z-index: 10000;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -341,7 +342,7 @@ $color_shadow: rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     letter-spacing: 1px;
     cursor: pointer;
-    z-index: 10;
+   // z-index: 10;
     &::after {
       content: "";
       @include size(0px);
@@ -356,6 +357,7 @@ $color_shadow: rgba(0, 0, 0, 0.5);
     }
   }
   > .container {
+    z-index: 9999;
     @include size(300px);
     background-color: $color_white;
     border-radius: 50%;
