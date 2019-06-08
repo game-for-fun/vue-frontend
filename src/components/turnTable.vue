@@ -24,9 +24,11 @@
       <span>GO</span>
     </div>
     <div class="container" :style="rotateHandler">
-      <div class="item" v-for="(item,index) in list" :key="item.label" :style="itemStyleHandler(item,index)"><img class="skew-back" src="../assets/roleSmall/beijita-small.jpg" alt="">
-        <span class="skew-back">{{item.label}}</span>
-      </div>
+   
+        <div class="item" v-for="(item,index) in list" :key="item.label" :style="itemStyleHandler(item,index)"><img class="skew-back" src="../assets/roleSmall/beijita-small.jpg" alt="">
+          <span class="skew-back">{{item.label}}</span>
+        </div>
+     
     </div>
     <div class="control">
       <div class="button" @click="openSetting">轉盤設定</div>
@@ -357,6 +359,8 @@ $color_shadow: rgba(0, 0, 0, 0.5);
     }
   }
   > .container {
+    // 加了这个属性就能fix手机端 skew的方块出圈的bug
+    position: relative;
     z-index: 9999;
     @include size(270px);
     background-color: $color_white;
